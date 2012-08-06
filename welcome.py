@@ -26,22 +26,20 @@ from hashing import *
 class MainHandler(webapp2.RequestHandler):
     def get(self):
 	# Get the cookie data for use in the welcome page
-	name = self.request.cookies.get('username')
 	user_id = self.request.cookies.get('user-id')
 
+	id_split = user_id.split("|")
+	
 	# Get the user from the database by using the user name from the cookie
-	user = db.GqlQuery("SELECT * FROM Users WHERE user_name=:1", name).get()
-
-	# Get the user's unique id
-	id = user.key().id()
+	key = db.Key.from_path('Users', int(id_split[0]))
+	user = db.get(key)
 	
 	# Verify that the retreived user id is the same as the hashed
 	# user id are one and the same. If so, welcome the user, else
 	# return to the signup page.
-	if valid_hash(str(id), "", user_id):
-	    self.response.out.write("<h1>Welcome, %s!</h1>" % name)
-	else:
-	    self.redirect("/signup")
+	if valid_3hash(str(id_split[0]), user_id):
+	    self.response.out.write("<h1>Welcome, %s!</h1>" % user.user_name)
+
  
 app = webapp2.WSGIApplication([('/welcome', MainHandler)],
                               debug=True)

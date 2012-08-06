@@ -34,8 +34,20 @@ def make_hash(toHash1, toHash2 = "", salt = None):
     # Return a name value pair using the hash and the salt
     return "%s|%s" % (h, salt)
 
+def make_3hash(toHash1, salt = None):
+    if salt == None:    
+	salt = make_salt()
+    # Create the actual hashed data
+    h = hashlib.sha256(toHash1 + salt).hexdigest()
+    # Return a name value pair using the hash and the salt
+    return "%s|%s|%s" % (toHash1, h, salt)
+
 # Validates the hashed inputs by accepting the 2 inputs and
 # the hash and making a new hash and testing against the original
 def valid_hash(testHash1, testHash2 = "", h = ""):
     salt = h.split('|')[1]
     return h == make_hash(testHash1, testHash2, salt)
+
+def valid_3hash(testHash1, h = ""):
+    salt = h.split('|')[2]
+    return h == make_3hash(testHash1, salt)

@@ -135,6 +135,7 @@ class MainHandler(webapp2.RequestHandler):
 	validate['v_password'] = ""
 	validate['v_verify'] = ""
 	validate['v_email'] = ""
+	validate['name'] = ""
 	# Render the form
         self.response.out.write(form % validate)
 
@@ -205,12 +206,11 @@ class MainHandler(webapp2.RequestHandler):
 	    # Get the unique id of the user
 	    user_id = registration.key().id()
 	    # Hash and salt the id
-	    id_hash = make_hash(str(user_id))
+	    id_hash = make_3hash(str(user_id))
 
-	    # Create a cookie with the username and a cookie for the hashed id
+	    # Create a cookie with the id, the hashed id, and the salt for the user
 	    # for later user verification
-	    self.response.headers.add_header('Set-Cookie', 'user-id=%s' % id_hash)
-	    self.response.headers.add_header('Set-Cookie', 'username=%s' % str(name))
+	    self.response.headers.add_header('Set-Cookie', 'user-id=%s; Path=/' % id_hash)
 	    self.redirect("/welcome")
 	else:
 	    # If the data was not valid, re-render the form with the values filled in
