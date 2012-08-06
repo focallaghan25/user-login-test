@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 #
 # LOGIN SYSTEM
@@ -32,11 +31,11 @@ def make_hash(toHash1, toHash2 = "", salt = None):
 	salt = make_salt()
     # Create the actual hashed data
     h = hashlib.sha256(toHash1 + toHash2 + salt).hexdigest()
-    # Return a name|value pair using the hash and the salt
+    # Return a name value pair using the hash and the salt
     return "%s|%s" % (h, salt)
 
 # Validates the hashed inputs by accepting the 2 inputs and
 # the hash and making a new hash and testing against the original
-def valid_hash(testHash1, testHash2 = "", h):
+def valid_hash(testHash1, testHash2 = "", h = ""):
     salt = h.split('|')[1]
     return h == make_hash(testHash1, testHash2, salt)

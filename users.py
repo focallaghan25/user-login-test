@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-#
-#
 # LOGIN SYSTEM
 # This is a basic login system that does nothing more
 # than register a user to a database and allows that
@@ -25,7 +22,3 @@ class Users(db.Model):
     password = db.StringProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
     email = db.StringProperty()
-
-if __name__=='__main__':      # is file being called from prompt?
-   assert my_sqrt(9) == 3
-   print "test ok"
